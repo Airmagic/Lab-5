@@ -29,17 +29,44 @@ def add_miles(vehicle, new_miles):
     if rows_mod.rowcount == 0:
         cur.execute('INSERT INTO MILES VALUES (?, ?)', (vehicle, new_miles))
     db.commit()
-    db.close()
 
+
+def vehicleInput():
+    vehicle = input('Enter vehicle name or enter to quit:')
+    vehicle = vehicleToUpper(vehicle)
+    if not vehicle:
+        return vehicle
+    vehicleCheck = cur.execute("select * from miles where vehicle = ?", (vehicle,))
+    # making a variable to test if it comes back none
+    checkOutput = vehicleCheck.fetchone()
+    print(checkOutput)
+    return vehicle
+
+def milesInput(vehicle):
+    try:
+        miles = float(input('Enter new miles for {}: '.format(vehicle,)))
+        return miles
+    except ValueError:
+        print("Needs to be a number")
+        milesInput()
+
+def vehicleToUpper(vehicle):
+    vehicle = vehicle.upper()
+    return vehicle
 
 def main():
     while True:
-        vehicle = input('Enter vehicle name or enter to quit:')
+        vehicle = vehicleInput()
         if not vehicle:
+            db.close()
             break
-        miles = float(input('Enter new miles for %s: ' % vehicle)) ## TODO input validation
+        miles =  milesInput(vehicle)
 
         add_miles(vehicle, miles)
+
+
+
+
 
 
 if __name__ == '__main__':
