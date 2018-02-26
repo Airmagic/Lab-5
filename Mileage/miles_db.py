@@ -1,3 +1,4 @@
+# making it so python works with sqlite
 import sqlite3
 
 db = sqlite3.connect('mileage.db')  #Creates of opens db file
@@ -8,21 +9,25 @@ cur = db.cursor() #need a cursor object to perform operations
     Create expected miles table
     create table miles (vehicle text, total_miles float);
 """
+# creating the table if none exists in the database
 cur.execute('create table If Not Exists miles (vehicle text, total_miles float)')
 
 
 class MileageError(Exception):
     pass
 
+# this part added miles to the current vechicle readout
 def add_miles(vehicle, new_miles):
     '''If the vehicle is in the database, increment the number of miles by new_miles
     If the vehicle is not in the database, add the vehicle and set the number of miles to new_miles
     If the vehicle is None or new_miles is not a positive number, raise MileageError
     '''
-
+    # This one will never come up because it is shorted to quit the program
     if not vehicle:
         raise MileageError('Provide a vehicle name')
         vehicleInput()
+
+
     if not isinstance(new_miles, (int, float))  or new_miles < 0:
         raise MileageError('Provide a positive number for new miles')
         milesInput(vehicle)
@@ -41,6 +46,7 @@ def vehicleInput():
     vehicleCheck = cur.execute("select * from miles where vehicle = ?", (vehicle,))
     # making a variable to test if it comes back none
     checkOutput = vehicleCheck.fetchone()
+    print("Vehicle, Current Mileage")
     print(checkOutput)
     return vehicle
 
@@ -57,16 +63,20 @@ def vehicleToUpper(vehicle):
     return vehicle
 
 def main():
-    while True:
-        vehicle = vehicleInput()
-        if not vehicle:
-            db.close()
-            break
-        miles =  milesInput(vehicle)
-
-        add_miles(vehicle, miles)
-
-
+    vehicle = vehicleInput()
+    if not vehicle:
+        db.close()
+        exit()
+    elif vehicle != None:
+        goToMiles = input("Would you like to add miles to the vechicle? Yes or No ")
+        if goToMiles in ('Y', 'y', 'Yes', 'yes'):
+            miles =  milesInput(vehicle)
+            add_miles(vehicle, miles)
+            main()
+        else:
+            main()
+    else:
+        main()
 
 
 
