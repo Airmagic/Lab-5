@@ -3,7 +3,7 @@
 import random
 
 # Get user input for their name
-name = input(' - To begin, what is your name? - \n')
+name = ""
 
 
 ROCK = 1
@@ -16,6 +16,7 @@ SCORES = 4
 # Main loop
 def main():
     try:
+        name = input(' - To begin, what is your name? - \n')
 
         # Get player input
         pchoice = getinput()

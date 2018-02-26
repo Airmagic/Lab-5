@@ -1,6 +1,7 @@
 import unittest
 from unittest.mock import patch
 import MockInputRPS
+import builtins
 
 class TestRPS(unittest.TestCase):
     @patch('builtins.input', return_value='1')
