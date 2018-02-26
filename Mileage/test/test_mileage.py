@@ -16,7 +16,7 @@ class TestMileageDB(TestCase):
     # The name of this method is important - the test runner will look for it
     def setUp(self):
         # Overwrite the mileage
-        mileage.db_url = self.test_db_url
+        mileage.db = self.test_db_url
         # drop everything from the DB to always start with an empty database
         conn = sqlite3.connect(self.test_db_url)
         conn.execute('DELETE FROM miles')
