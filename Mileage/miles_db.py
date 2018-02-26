@@ -22,8 +22,10 @@ def add_miles(vehicle, new_miles):
 
     if not vehicle:
         raise MileageError('Provide a vehicle name')
+        vehicleInput()
     if not isinstance(new_miles, (int, float))  or new_miles < 0:
         raise MileageError('Provide a positive number for new miles')
+        milesInput(vehicle)
 
     rows_mod = cur.execute('UPDATE MILES SET total_miles = total_miles + ? WHERE vehicle = ?', (new_miles, vehicle))
     if rows_mod.rowcount == 0:
