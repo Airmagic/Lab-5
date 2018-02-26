@@ -1,5 +1,5 @@
-import mileage
-from mileage import MileageError
+import miles_db
+from miles_db import MileageError
 import sqlite3
 from unittest import TestCase
 
@@ -16,7 +16,7 @@ class TestMileageDB(TestCase):
     # The name of this method is important - the test runner will look for it
     def setUp(self):
         # Overwrite the mileage
-        mileage.db = self.test_db_url
+        miles_db.db = self.test_db_url
         # drop everything from the DB to always start with an empty database
         conn = sqlite3.connect(self.test_db_url)
         conn.execute('DELETE FROM miles')
@@ -25,37 +25,37 @@ class TestMileageDB(TestCase):
 
 
     def test_add_new_vehicle(self):
-        mileage.add_miles('Blue Car', 100)
+        miles_db.add_miles('Blue Car', 100)
         expected = { 'Blue Car': 100 }
         self.compare_db_to_expected(expected)
 
-        mileage.add_miles('Green Car', 50)
+        miles_db.add_miles('Green Car', 50)
         expected['Green Car'] = 50
         self.compare_db_to_expected(expected)
 
 
     def test_increase_miles_for_vehicle(self):
-        mileage.add_miles('Red Car', 100)
+        miles_db.add_miles('Red Car', 100)
         expected = { 'Red Car': 100 }
         self.compare_db_to_expected(expected)
 
-        mileage.add_miles('Red Car', 50)
+        miles_db.add_miles('Red Car', 50)
         expected['Red Car'] = 100 + 50
         self.compare_db_to_expected(expected)
 
 
     def test_add_new_vehicle_no_vehicle(self):
         with self.assertRaises(Exception):
-            mileage.addMiles(None, 100)
+            miles_db.addMiles(None, 100)
 
 
     def test_add_new_vehicle_invalid_new_miles(self):
         with self.assertRaises(MileageError):
-            mileage.add_miles('Car', -100)
+            miles_db.add_miles('Car', -100)
         with self.assertRaises(MileageError):
-            mileage.add_miles('Car', 'abc')
+            miles_db.add_miles('Car', 'abc')
         with self.assertRaises(MileageError):
-            mileage.add_miles('Car', '12.def')
+            miles_db.add_miles('Car', '12.def')
 
 
     # This is not a test method, instead, it's used by the test methods
