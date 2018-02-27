@@ -4,7 +4,7 @@
 import random
 
 # main program so I can call it
-def coinFlips():
+def main():
     # this try is incase a value error
     try:
 
@@ -15,10 +15,10 @@ def coinFlips():
         heads, tails, timesflipped = 0, 0, 0
 
         # getting the number of flips from user
-        numberFlipped = int(input('How many time do you want to flip? '))
+        numberFlipped = numberFlippedInput()
 
         # getting the number of guess for heads
-        guessHeads = int(input("How many times do you think it will land heads? "))
+        guessHeads = guessHeadsInput(numberFlipped)
 
         # a while loop to get the number of random 0 or 1s
         while timesflipped < numberFlipped:
@@ -44,17 +44,62 @@ def coinFlips():
         print("Your guess was " + str(guessHeads) + " times that heads would appear")
 
         # added a replay feature
-        replay = input('Would you like to play again? Y or N  ')
+        replay()
 
-        # if statement to open the coinFlip again if these are entered
-        if replay == 'y' or replay == 'Y' or replay == 'Yes' or replay == 'YES':
-            coinFlips()
+
 
     # value error handler incase user puts in anthing other than a number
     except ValueError:
         print("Must be a number")
         # calling main program
-        coinFlips()
+        main()
+
+def numberFlippedInput():
+    try:
+        # getting user input
+        numberFlipped = int(input('How many time do you want to flip? '))
+        # returning the number inputed
+        return numberFlipped
+
+    # exception if a number isn't inputed
+    except ValueError:
+        # print information for the user
+        print("Must be a number")
+        # calling main program
+        numberFlippedInput()
+
+def guessHeadsInput(number):
+    try:
+        # getting input from the user
+        guessHeads = int(input("How many times do you think it will land heads? "))
+        # checking the range so that the user puts in a plasible number
+        if guessHeads < 0 or guessHeads > number:
+            # printing info for the user
+            print("Please enter a number from 0 to {}".format(number,))
+            # returning to this program
+            guessHeadsInput(number)
+
+        # returning that variable
+        return guessHeads
+
+
+    except ValueError:
+        print("Must be a number")
+        # calling main program
+        guessHeadsInput(number)
+
+
+def replay():
+    # asking user if they want to run the program again
+    replay = input('Would you like to play again? Y or N  ')
+    # if statement to open the coinFlip again if these are entered
+    if replay in ('y', 'Y', 'Yes', 'YES'):
+        # calling the main again
+        main()
+    else:
+        # closing the program
+        exit()
 
 # calling the program at the end of the python so that it checks the program first
-coinFlips()
+if __name__ == '__main__':
+    main()
